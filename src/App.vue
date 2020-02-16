@@ -11,8 +11,7 @@
 
       <form @submit.prevent="salvar">
 
-         {{produto.name}}
-         {{produto.id}}
+       
            <input type="text" placeholder="descricao" v-model="produto.description">
           <label>Valor</label>
           <label>Nome</label>
@@ -80,10 +79,8 @@ export default {
     }
   },
   mounted(){
-    Produto.listar().then(resposta=>{
-      console.log(resposta.data)
-      this.produtos = resposta
-    })
+  this.listar()
+    
 
   },
   methods:{
