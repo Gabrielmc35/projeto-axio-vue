@@ -93,7 +93,7 @@ export default {
       })
     },
     salvar(){
-       
+        
       if(!this.produto.id){
         Produto.salvar(this.produto).then(resposta => {
           resposta
@@ -108,6 +108,8 @@ export default {
         Produto.atualizar(this.produto).then(resposta => {
           resposta
           this.produto = {}
+          //this.produto.priceHistoryList[0].price={}
+
           this.errors = {}
           alert('Atualizado com sucesso!')
           this.listar()
@@ -128,6 +130,7 @@ export default {
           this.errors = {}
         }).catch(e => {
           this.errors = e.response.data.errors
+          console.log(e)
         })
       }
     }

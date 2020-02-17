@@ -10,9 +10,9 @@ export default {
 		return http.post('/product',produto);
     },
     atualizar:(produto)=>{
-      return http.put('produto',produto);
+      return http.put('/product',produto);
     },
     apagar:(produto)=>{
-      return http.delete('produto', { data: produto })
+      return http.delete('/product', { data: produto })
     }
 }
