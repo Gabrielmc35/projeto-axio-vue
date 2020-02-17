@@ -11,15 +11,15 @@
 
       <form @submit.prevent="salvar">
 
-       
-           <input type="text" placeholder="descricao" v-model="produto.description">
-          <label>Valor</label>
+         
           <label>Nome</label>
           <input type="text" placeholder="NOME" v-model="produto.name">
-          <label>Descricao</label>
+           <label>Descricao </label>
+           <input type="text" placeholder="descricao" v-model="produto.description">
+          <label>Valor</label>
         
         
-          <input type="text" placeholder="Valor " v-model="produto.price">
+          <input type="number" placeholder="Valor " v-model="produto.price">
           
           <button class="waves-effect waves-light btn-small">Salvar<i class="material-icons left">save</i></button>
 
@@ -31,9 +31,8 @@
 
           <tr>
             <th>NOME</th>
-            <th>QTD</th>
             <th>VALOR</th>
-            <th>OPÇÕES</th>
+            <th>DESCRIÇÃO</th>
           </tr>
 
         </thead>
@@ -43,11 +42,12 @@
           <tr v-for="produto of produtos " :key="produto.id">
 
             <td>{{produto.name}}</td>
+            <td>{{produto.priceHistoryList[0].price}} </td>
             <td>{{produto.description}}</td>
-            <td>{{produto.price}} </td>
+
             <td>
-              <button class="waves-effect btn-small blue darken-1"><i class="material-icons">create</i></button>
-              <button class="waves-effect btn-small red darken-1"><i class="material-icons">delete_sweep</i></button>
+              <button @click="editar(produto)" class="waves-effect btn-small blue darken-1"><i class="material-icons">create</i></button>
+              <button @click="remover(produto)" class="waves-effect btn-small red darken-1"><i class="material-icons">delete_sweep</i></button>
             </td>
 
           </tr>
@@ -69,10 +69,9 @@ export default {
   data(){
     return {
       produto: {
-        description:"string",
-        //id:1,
-        name:"string",
-        price:10
+        description:"",
+        name:"",
+        price: 0
 
       },
       produtos:[]
@@ -81,29 +80,60 @@ export default {
   mounted(){
   this.listar()
     
-    
 
   },
   methods:{
    listar(){
       Produto.listar().then(resposta => {
         this.produtos = resposta.data
+            console.log(resposta.data)
+
       }).catch(e => {
         console.log(e)
       })
     },
     salvar(){
-       alert(this.produto.id)
-    
-
-      Produto.salvar(this.produto).then(resposta =>{
        
-       resposta
-
-      })  .catch(e => {
-        console.log(e)
+      if(!this.produto.id){
+        Produto.salvar(this.produto).then(resposta => {
+          resposta
+          this.produto = {}
+          alert('Cadastrado com sucesso!')
+          this.listar()
+          this.errors = {}
+        }).catch(e => {
+          this.errors = e.response.data.errors
         })
+      }else{
+        Produto.atualizar(this.produto).then(resposta => {
+          resposta
+          this.produto = {}
+          this.errors = {}
+          alert('Atualizado com sucesso!')
+          this.listar()
+        }).catch(e => {
+          this.errors = e.response.data.errors
+        })
+      }
+      
+    },
+    editar(produto){
+      this.produto = produto
+    },
+    remover(produto){
+      if(confirm('Deseja excluir o produto?')){
+        Produto.apagar(produto).then(resposta => {
+          resposta
+          this.listar()
+          this.errors = {}
+        }).catch(e => {
+          this.errors = e.response.data.errors
+        })
+      }
     }
   }
 }
 </script>
+
+<style>
+</style>
