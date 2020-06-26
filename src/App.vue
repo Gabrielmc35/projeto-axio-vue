@@ -12,7 +12,7 @@
       <form @submit.prevent="salvar">
 
          
-          <label>Nome</label>
+          <label>NoOme</label>
           <input type="text" placeholder="NOME" v-model="produto.name">
            <label>Descricao </label>
            <input type="text" placeholder="descricao" v-model="produto.description">
